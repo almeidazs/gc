@@ -6,7 +6,7 @@ import (
 
 func Prompt(diff string) (string, error) {
 	key, profile, err := getAI()
-	
+
 	if err != nil {
 		return "", err
 	}

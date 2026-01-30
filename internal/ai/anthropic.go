@@ -50,15 +50,15 @@ func requestAnthropic(key, model, prompt string) (string, error) {
 	req.Header.Set("anthropic-version", "2023-06-01")
 
 	resp, err := httpClient.Do(req)
-	
+
 	if err != nil {
 		return "", err
 	}
-	
+
 	defer resp.Body.Close()
 
 	bodyBytes, err := io.ReadAll(resp.Body)
-	
+
 	if err != nil {
 		return "", err
 	}
@@ -68,7 +68,7 @@ func requestAnthropic(key, model, prompt string) (string, error) {
 	}
 
 	var result anthropicResponse
-	
+
 	if err := json.Unmarshal(bodyBytes, &result); err != nil {
 		return "", err
 	}

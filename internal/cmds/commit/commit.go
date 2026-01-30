@@ -6,8 +6,9 @@ import (
 	"github.com/almeidazs/gc/internal/git"
 )
 
-func Commit(branch string, files []string) error {
-	branch, err := git.ResolveBranch(branch)
+func Commit(options CommitOptions) error {
+	// Ignore branch for now (Will be used later)
+	_, err := git.ResolveBranch(options.Branch)
 
 	if err != nil {
 		return err
@@ -15,7 +16,7 @@ func Commit(branch string, files []string) error {
 
 	fmt.Println("Staging files...")
 
-	if err := git.Stage(files); err != nil {
+	if err := git.Stage(options.Files); err != nil {
 		return err
 	}
 
@@ -31,6 +32,16 @@ func Commit(branch string, files []string) error {
 
 	if err != nil {
 		return err
+	}
+
+	if options.Coauthored {
+		name, email, err := askCoauthor()
+
+		if err != nil {
+			return err
+		}
+
+		message += fmt.Sprintf("\n\nCo-authored-by: %s <%s>", name, email)
 	}
 
 	fmt.Printf("Message generated (%v chars), commiting...", len(message))

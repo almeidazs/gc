@@ -47,7 +47,7 @@ func doRequest(url, method, authHeader, authValue string, payload interface{}) (
 	defer resp.Body.Close()
 
 	bodyBytes, err := io.ReadAll(resp.Body)
-	
+
 	if err != nil {
 		return nil, err
 	}

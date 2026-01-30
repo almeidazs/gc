@@ -35,7 +35,6 @@ func ResolveBranch(branch string) (string, error) {
 	return CurrentBranch()
 }
 
-
 func Stage(files []string) error {
 	args := []string{"add"}
 
@@ -65,7 +64,6 @@ func Stage(files []string) error {
 
 	return nil
 }
-
 
 func StagedDiff() (string, error) {
 	var output bytes.Buffer

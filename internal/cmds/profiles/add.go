@@ -26,8 +26,8 @@ func Add(name, key string) error {
 	}
 
 	cfg.Add(config.Profile{
-		Name: name,
-		Model: model,
+		Name:     name,
+		Model:    model,
 		Provider: provider,
 	})
 

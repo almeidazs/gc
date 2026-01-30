@@ -2,13 +2,13 @@ package profiles
 
 import (
 	"fmt"
-	"strings"
 	"github.com/almeidazs/gc/internal/config"
+	"strings"
 )
 
 const (
 	reset    = "\033[0m"
-	lavender = "\033[38;5;183m" 
+	lavender = "\033[38;5;183m"
 )
 
 func List() error {
@@ -44,6 +44,6 @@ func List() error {
 	}
 
 	fmt.Print(builder.String())
-	
+
 	return nil
 }
