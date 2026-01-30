@@ -10,7 +10,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:     "gc",
 	SilenceUsage: true,
-	SilenceErrors: true,
+	SilenceErrors: false,
 	Version: version.Version,
 	Short:   "GC is an ergonomic AI-powered commit message generator",
 }
