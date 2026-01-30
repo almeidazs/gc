@@ -52,7 +52,7 @@ func Commit(options CommitOptions) error {
 
 	fmt.Printf("Message generated (%v chars), commiting...", len(message))
 
-	if git.Commit(message); err != nil {
+	if err := git.Commit(message); err != nil {
 		return err
 	}
 
