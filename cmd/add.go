@@ -8,8 +8,8 @@ import (
 var key string
 
 var addCmd = &cobra.Command{
-	Use: "add <name>",
-	Args: cobra.ExactArgs(1),
+	Use:   "add <name>",
+	Args:  cobra.ExactArgs(1),
 	Short: "Add a new profile to use",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		name := args[0]

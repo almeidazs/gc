@@ -8,11 +8,11 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:     "gc",
-	SilenceUsage: true,
+	Use:           "gc",
+	SilenceUsage:  true,
 	SilenceErrors: false,
-	Version: version.Version,
-	Short:   "GC is an ergonomic AI-powered commit message generator",
+	Version:       version.Version,
+	Short:         "GC is an ergonomic AI-powered commit message generator",
 }
 
 func init() {

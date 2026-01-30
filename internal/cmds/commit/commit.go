@@ -28,13 +28,19 @@ func Commit(options CommitOptions) error {
 		return err
 	}
 
-	message, err := generateMessage(diff)
+	skip := options.SkipPrompts
+
+	message, err := generateMessage(diff, skip)
 
 	if err != nil {
 		return err
 	}
 
 	if options.Coauthored {
+		if skip {
+			return fmt.Errorf("you can not use --yes flag with --coauthor one")
+		}
+
 		name, email, err := askCoauthor()
 
 		if err != nil {

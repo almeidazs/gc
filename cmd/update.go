@@ -6,7 +6,7 @@ import (
 )
 
 var updateCmd = &cobra.Command{
-	Use: "update",
+	Use:     "update",
 	Aliases: []string{"upgrade"},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return update.Update()

@@ -6,7 +6,7 @@ import (
 )
 
 var listCmd = &cobra.Command{
-	Use: "list",
+	Use:   "list",
 	Short: "List all profiles that you created",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return profiles.List()
