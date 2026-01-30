@@ -3,7 +3,7 @@ package cmd
 import (
 	"os"
 
-	"github.com.almeidazs/gc/internal/version"
+	"github.com/almeidazs/gc/internal/version"
 	"github.com/spf13/cobra"
 )
 
