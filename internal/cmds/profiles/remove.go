@@ -17,7 +17,7 @@ func Remove(name string) error {
 	isCrr := cfg.Current == name
 
 	if isCrr {
-		return fmt.Errorf("currently \"%s\" is your profile, you need to switch it first")
+		return fmt.Errorf("currently \"%s\" is your profile, you need to switch it first", name)
 	}
 
 	if _, exists := cfg.Profiles[name]; !exists {
