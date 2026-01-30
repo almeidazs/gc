@@ -1,0 +1,29 @@
+project_name: gc
+
+builds:
+  - main: ./main.go
+    binary: gs
+    ldflags:
+      - -X github.com/almeidazs/gc/cmd.v={{.Version}}
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - format: tar.gz
+    name_template: '{{ .Binary }}_{{ .Os }}_{{ .Arch }}'
+    files:
+      - LICENSE
+      - README.md
+
+checksum:
+  name_template: 'checksums.txt'
+
+release:
+  github:
+    owner: almeidazs
+    name: gc
