@@ -15,3 +15,7 @@ func (c *Config) Add(profile Profile) {
 	c.Current = profile.Name
 	c.Profiles[profile.Name] = profile
 }
+
+func (c *Config) Remove(name string) {
+	delete(c.Profiles, name)
+}
