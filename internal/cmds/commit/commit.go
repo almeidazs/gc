@@ -3,6 +3,7 @@ package commit
 import (
 	"fmt"
 
+	"github.com/almeidazs/gc/internal/config"
 	"github.com/almeidazs/gc/internal/git"
 )
 
@@ -25,7 +26,13 @@ func Commit(options CommitOptions) error {
 		return err
 	}
 
-	message, err := resolveMessage(options, diff)
+	profile, err := config.GetCurrent()
+
+	if err != nil {
+		return err
+	}
+
+	message, err := resolveMessage(options, profile, diff)
 
 	if err != nil {
 		return err
@@ -37,7 +44,7 @@ func Commit(options CommitOptions) error {
 		return err
 	}
 
-	if options.Push {
+	if options.Push || profile.AlwaysPush {
 		return push(options.Branch)
 	}
 

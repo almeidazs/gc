@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/almeidazs/gc/internal/ai"
+	"github.com/almeidazs/gc/internal/config"
 	"github.com/almeidazs/gc/internal/git"
 	"github.com/almeidazs/gc/internal/style"
 	"github.com/charmbracelet/huh"
@@ -26,14 +27,14 @@ func push(branch string) error {
 	return nil
 }
 
-func resolveMessage(opts CommitOptions, diff string) (string, error) {
+func resolveMessage(opts CommitOptions, profile config.Profile, diff string) (string, error) {
 	if opts.Message != "" {
 		fmt.Printf("Using custom message (%d chars)...\n", len(opts.Message))
 
 		return opts.Message, nil
 	}
 
-	msg, err := generateMessage(diff, opts.SkipPrompts, opts.Emojis)
+	msg, err := generateMessage(diff, opts.SkipPrompts, opts.Emojis || profile.UseEmojis)
 
 	if err != nil {
 		return "", err

@@ -30,6 +30,7 @@ func Add(name, key string) error {
 		Name:      name,
 		Model:     model,
 		UseEmojis: false,
+		AlwaysPush: false,
 		Provider:  provider,
 	}); err != nil {
 		return err
