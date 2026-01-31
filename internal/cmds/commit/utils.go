@@ -11,14 +11,14 @@ import (
 	"github.com/charmbracelet/huh"
 )
 
-func push(branch string) error {
-	resolved, err := git.ResolveBranch(branch)
+func push(opts PushOptions) error {
+	resolved, err := git.ResolveBranch(opts.Branch)
 
 	if err != nil {
 		return err
 	}
 
-	if err := git.Push(resolved); err != nil {
+	if err := git.Push(resolved, opts.SetUpstream); err != nil {
 		return err
 	}
 

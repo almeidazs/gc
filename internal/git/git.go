@@ -109,8 +109,12 @@ func Commit(message string) error {
 	return nil
 }
 
-func Push(branch string) error {
+func Push(branch string, setUpstream bool) error {
 	args := []string{"push", "origin", branch}
+
+	if setUpstream {
+		args = append(args, "-u")
+	}
 
 	cmd := exec.Command("git", args...)
 

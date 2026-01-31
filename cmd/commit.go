@@ -6,7 +6,7 @@ import (
 )
 
 var branch, message string
-var skip, push, emojis, coauthored bool
+var skip, push, emojis, upstream, coauthored bool
 
 var commitCmd = &cobra.Command{
 	Use:     "commit",
@@ -21,6 +21,7 @@ var commitCmd = &cobra.Command{
 			Files:       files,
 			SkipPrompts: skip,
 			Message:     message,
+			SetUpstream: upstream,
 		})
 	},
 }
@@ -32,6 +33,7 @@ func init() {
 	commitCmd.Flags().StringVarP(&branch, "branch", "b", "", "A specific branch to push to")
 	commitCmd.Flags().StringVarP(&message, "message", "m", "", "Use a specific message while commiting")
 	commitCmd.Flags().BoolVarP(&coauthored, "coauthored", "c", false, "Whether the commit is coauthored or not")
+	commitCmd.Flags().BoolVarP(&upstream, "upstream", "u", false, "Set the upstream with the branch used in the push")
 
 	rootCmd.AddCommand(commitCmd)
 }

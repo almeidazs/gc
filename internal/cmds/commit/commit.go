@@ -45,7 +45,10 @@ func Commit(options CommitOptions) error {
 	}
 
 	if options.Push || profile.AlwaysPush {
-		return push(options.Branch)
+		return push(PushOptions{
+			Branch:      options.Branch,
+			SetUpstream: options.SetUpstream,
+		})
 	}
 
 	return nil
