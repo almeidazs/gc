@@ -5,6 +5,7 @@ import (
 
 	"github.com/almeidazs/gc/internal/config"
 	"github.com/almeidazs/gc/internal/keyring"
+	"github.com/almeidazs/gc/internal/style"
 	"github.com/charmbracelet/huh"
 )
 
@@ -111,7 +112,7 @@ func askModel(key string) (apikey string, name string, aimodel string) {
 
 	huh.NewForm(
 		huh.NewGroup(fields...),
-	).Run()
+	).WithAccessible(style.USE_ACCESSIBLE_MODE).Run()
 
 	return key, ai, model
 }

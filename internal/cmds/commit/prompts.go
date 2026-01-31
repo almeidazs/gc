@@ -3,6 +3,7 @@ package commit
 import (
 	"strings"
 
+	"github.com/almeidazs/gc/internal/style"
 	"github.com/charmbracelet/huh"
 )
 
@@ -25,7 +26,7 @@ func askCoauthor() (string, string, error) {
 					return []string{email + "@gmail.com", email + "@outlook.com"}
 				}, &email),
 		),
-	)
+	).WithAccessible(style.USE_ACCESSIBLE_MODE)
 
 	if err := form.Run(); err != nil {
 		return "", "", err

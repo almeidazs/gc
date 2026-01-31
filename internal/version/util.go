@@ -11,6 +11,7 @@ func CheckUpdate(ctx context.Context, crr string) (*selfupdate.Release, bool, er
 	slug := "almeidazs/gc"
 
 	latest, found, err := selfupdate.DetectLatest(slug)
+
 	if err != nil {
 		return nil, false, err
 	}
