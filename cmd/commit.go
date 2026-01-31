@@ -14,6 +14,8 @@ var commitCmd = &cobra.Command{
 	Short:   "Generate ergonomic commit messages with AI",
 	RunE: func(cmd *cobra.Command, files []string) error {
 		return commit.Commit(commit.CommitOptions{
+			Push:        push,
+			Emojis:      emojis,
 			Branch:      branch,
 			Coauthored:  coauthored,
 			Files:       files,
