@@ -63,11 +63,19 @@ func (c *Config) Remove(name string) error {
 }
 
 func (c *Config) Switch(name string) error {
+	if c.Current == name {
+		return fmt.Errorf("This is already your current profile")
+	}
+
+	if _, exists := c.Profiles[name]; !exists {
+		return fmt.Errorf("\"%s\" is not a profile", name)
+	}
+
 	if _, ok := c.Profiles[name]; !ok {
 		return fmt.Errorf("profile '%s' not found", name)
 	}
 
 	c.Current = name
 
-	return nil
+	return c.Save()
 }

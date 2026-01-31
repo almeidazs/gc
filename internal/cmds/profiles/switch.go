@@ -1,8 +1,6 @@
 package profiles
 
 import (
-	"fmt"
-
 	"github.com/almeidazs/gc/internal/config"
 )
 
@@ -13,19 +11,5 @@ func Switch(name string) error {
 		return err
 	}
 
-	if cfg.Current == name {
-		return fmt.Errorf("This is already your current profile")
-	}
-
-	if _, exists := cfg.Profiles[name]; !exists {
-		return fmt.Errorf("\"%s\" is not a profile", name)
-	}
-
-	cfg.Current = name
-
-	if err := cfg.Save(); err != nil {
-		return err
-	}
-
-	return nil
+	return cfg.Switch(name)
 }
