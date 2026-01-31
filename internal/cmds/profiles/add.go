@@ -25,12 +25,14 @@ func Add(name, key string) error {
 		return err
 	}
 
-	cfg.Add(config.Profile{
+	if err := cfg.Add(config.Profile{
 		Name:      name,
 		Model:     model,
 		UseEmojis: false,
 		Provider:  provider,
-	})
+	}); err != nil {
+		return err
+	}
 
 	if err := config.Save(cfg); err != nil {
 		return err

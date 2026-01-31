@@ -28,7 +28,9 @@ func Remove(name string) error {
 		return err
 	}
 
-	cfg.Remove(name)
+	if err := cfg.Remove(name); err != nil {
+		return err
+	}
 
 	if err := config.Save(cfg); err != nil {
 		return err
