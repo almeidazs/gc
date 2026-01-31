@@ -41,7 +41,7 @@ func Stage(files []string) error {
 	if len(files) == 0 {
 		args = append(args, ".")
 
-		fmt.Printf("No files provided, staging all...")
+		fmt.Println("No files provided, staging all...")
 	} else {
 		args = append(args, files...)
 	}
