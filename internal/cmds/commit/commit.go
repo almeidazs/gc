@@ -5,6 +5,7 @@ import (
 
 	"github.com/almeidazs/gc/internal/config"
 	"github.com/almeidazs/gc/internal/git"
+	"github.com/almeidazs/gc/internal/style"
 )
 
 func Commit(options CommitOptions) error {
@@ -12,13 +13,15 @@ func Commit(options CommitOptions) error {
 		return err
 	}
 
-	fmt.Println("Staging files...")
+	spinner := style.NewSpinner("Staging files...")
 
-	if err := git.Stage(options.Files); err != nil {
+	defer spinner.Stop()
+
+	if err := git.Stage(options.Files, spinner); err != nil {
 		return err
 	}
 
-	fmt.Println("Currently analyzing the changes and generating the message...")
+	spinner.Update("Currently analyzing the changes to generate the message...")
 
 	diff, err := git.StagedDiff()
 
@@ -26,11 +29,15 @@ func Commit(options CommitOptions) error {
 		return err
 	}
 
+	spinner.Update("Fetching your current profile...")
+
 	profile, err := config.GetCurrent()
 
 	if err != nil {
 		return err
 	}
+
+	spinner.Update("Trying to generate the message or use the -m one...")
 
 	message, err := resolveMessage(options, profile, diff)
 
@@ -38,13 +45,15 @@ func Commit(options CommitOptions) error {
 		return err
 	}
 
-	fmt.Printf("Committing (%d chars)...\n", len(message))
+	spinner.Update(fmt.Sprintf("Committing the message (%d chars)...", len(message)))
 
 	if err := git.Commit(message); err != nil {
 		return err
 	}
 
 	if options.Push || profile.AlwaysPush {
+		spinner.Update("Automatic push detected, trying to push to the branch")
+
 		return push(PushOptions{
 			Branch:      options.Branch,
 			SetUpstream: options.SetUpstream,

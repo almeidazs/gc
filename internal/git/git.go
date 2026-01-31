@@ -7,6 +7,8 @@ import (
 	"io"
 	"os/exec"
 	"strings"
+
+	"github.com/almeidazs/gc/internal/style"
 )
 
 func execCmd(name string, args ...string) (string, error) {
@@ -35,13 +37,13 @@ func ResolveBranch(branch string) (string, error) {
 	return CurrentBranch()
 }
 
-func Stage(files []string) error {
+func Stage(files []string, spinner *style.Spinner) error {
 	args := []string{"add"}
 
 	if len(files) == 0 {
 		args = append(args, ".")
 
-		fmt.Println("No files provided, staging all...")
+		spinner.Update("No files provided, staging all files...")
 	} else {
 		args = append(args, files...)
 	}
