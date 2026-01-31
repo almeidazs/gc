@@ -3,5 +3,5 @@ package style
 import "os"
 
 var (
-	USE_ACCESSIBLE_MODE = os.Getenv("ACCESSIBLE_MODE") != ""
+	USE_ACCESSIBLE_MODE = os.Getenv("GC_ACCESSIBLE_MODE") != ""
 )
