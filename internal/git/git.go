@@ -108,3 +108,23 @@ func Commit(message string) error {
 
 	return nil
 }
+
+func Push(branch string) error {
+	args := []string{"push", "origin", branch}
+
+	cmd := exec.Command("git", args...)
+
+	var stderr bytes.Buffer
+
+	cmd.Stderr = &stderr
+
+	if err := cmd.Run(); err != nil {
+		if stderr.Len() > 0 {
+			return fmt.Errorf("git push failed: %s", strings.TrimSpace(stderr.String()))
+		}
+
+		return fmt.Errorf("git push failed: %w", err)
+	}
+
+	return nil
+}

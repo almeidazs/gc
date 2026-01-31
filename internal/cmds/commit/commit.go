@@ -7,10 +7,7 @@ import (
 )
 
 func Commit(options CommitOptions) error {
-	// Ignore branch for now (Will be used later)
-	_, err := git.ResolveBranch(options.Branch)
-
-	if err != nil {
+	if err := validateOptions(options); err != nil {
 		return err
 	}
 
@@ -28,42 +25,20 @@ func Commit(options CommitOptions) error {
 		return err
 	}
 
-	if options.Message != "" {
-		fmt.Printf("Using your custom message (%v), commiting...", len(options.Message))
-
-		if err := git.Commit(options.Message); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	skip := options.SkipPrompts
-
-	message, err := generateMessage(diff, skip, options.Emojis)
+	message, err := resolveMessage(options, diff)
 
 	if err != nil {
 		return err
 	}
 
-	if options.Coauthored {
-		if skip {
-			return fmt.Errorf("you can not use --yes flag with --coauthor one")
-		}
-
-		name, email, err := askCoauthor()
-
-		if err != nil {
-			return err
-		}
-
-		message += fmt.Sprintf("\n\nCo-authored-by: %s <%s>", name, email)
-	}
-
-	fmt.Printf("Message generated (%v chars), commiting...", len(message))
+	fmt.Printf("Committing (%d chars)...\n", len(message))
 
 	if err := git.Commit(message); err != nil {
 		return err
+	}
+
+	if options.Push {
+		return push(options.Branch)
 	}
 
 	return nil

@@ -6,7 +6,7 @@ import (
 )
 
 var branch, message string
-var skip, emojis, coauthored bool
+var skip, push, emojis, coauthored bool
 
 var commitCmd = &cobra.Command{
 	Use:     "commit",
@@ -25,6 +25,7 @@ var commitCmd = &cobra.Command{
 
 func init() {
 	commitCmd.Flags().BoolVarP(&skip, "yes", "y", false, "Skip all prompts or not")
+	commitCmd.Flags().BoolVarP(&push, "push", "p", false, "Automatically push the commit")
 	commitCmd.Flags().BoolVarP(&emojis, "emojis", "e", false, "Use emojis when generating the message")
 	commitCmd.Flags().StringVarP(&branch, "branch", "b", "", "A specific branch to push to")
 	commitCmd.Flags().StringVarP(&message, "message", "m", "", "Use a specific message while commiting")
