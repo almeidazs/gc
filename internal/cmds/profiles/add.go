@@ -26,9 +26,10 @@ func Add(name, key string) error {
 	}
 
 	cfg.Add(config.Profile{
-		Name:     name,
-		Model:    model,
-		Provider: provider,
+		Name:      name,
+		Model:     model,
+		UseEmojis: false,
+		Provider:  provider,
 	})
 
 	if err := config.Save(cfg); err != nil {

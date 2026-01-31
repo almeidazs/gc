@@ -5,8 +5,8 @@ import (
 	"github.com/charmbracelet/huh"
 )
 
-func generateMessage(diff string, skip bool) (string, error) {
-	content, err := ai.Prompt(diff)
+func generateMessage(diff string, skip bool, emojis bool) (string, error) {
+	content, err := ai.Prompt(diff, emojis)
 
 	if err != nil {
 		return "", err

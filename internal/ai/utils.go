@@ -8,11 +8,13 @@ import (
 
 func getAI() (string, config.Profile, error) {
 	current, err := config.GetCurrent()
+
 	if err != nil {
 		return "", config.Profile{}, err
 	}
 
 	key, err := keyring.Get(current.Name)
+
 	if err != nil {
 		return "", config.Profile{}, fmt.Errorf("failed to get API key: %w", err)
 	}

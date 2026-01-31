@@ -30,7 +30,7 @@ func Commit(options CommitOptions) error {
 
 	skip := options.SkipPrompts
 
-	message, err := generateMessage(diff, skip)
+	message, err := generateMessage(diff, skip, options.Emojis)
 
 	if err != nil {
 		return err

@@ -20,6 +20,7 @@ var (
 
 func GetCurrent() (Profile, error) {
 	cfg, err := Load()
+
 	if err != nil {
 		return Profile{}, err
 	}
@@ -29,6 +30,7 @@ func GetCurrent() (Profile, error) {
 	}
 
 	profile, ok := cfg.Profiles[cfg.Current]
+
 	if !ok {
 		return Profile{}, fmt.Errorf("active profile '%s' not found", cfg.Current)
 	}

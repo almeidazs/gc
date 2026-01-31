@@ -3,9 +3,12 @@ package config
 import "fmt"
 
 type Profile struct {
-	Name     string `json:"name"`
-	Provider string `json:"provider"`
-	Model    string `json:"model,omitempty"`
+	// TODO: Add a command to update the profile options
+
+	UseEmojis bool   `json:"emojis"`
+	Name      string `json:"name"`
+	Provider  string `json:"provider"`
+	Model     string `json:"model,omitempty"`
 }
 
 type Config struct {
