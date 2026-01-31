@@ -5,5 +5,6 @@ type CommitOptions struct {
 	Coauthored  bool
 	SkipPrompts bool
 	Branch      string
+	Message     string
 	Files       []string
 }

@@ -28,6 +28,16 @@ func Commit(options CommitOptions) error {
 		return err
 	}
 
+	if options.Message != "" {
+		fmt.Printf("Using your custom message (%v), commiting...", len(options.Message))
+
+		if err := git.Commit(options.Message); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
 	skip := options.SkipPrompts
 
 	message, err := generateMessage(diff, skip, options.Emojis)
