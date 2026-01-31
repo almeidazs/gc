@@ -23,7 +23,7 @@ func Switch(name string) error {
 
 	cfg.Current = name
 
-	if err := config.Save(cfg); err != nil {
+	if err := cfg.Save(); err != nil {
 		return err
 	}
 

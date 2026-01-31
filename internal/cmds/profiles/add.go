@@ -34,7 +34,7 @@ func Add(name, key string) error {
 		return err
 	}
 
-	if err := config.Save(cfg); err != nil {
+	if err := cfg.Save(); err != nil {
 		return err
 	}
 
