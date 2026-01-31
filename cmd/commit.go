@@ -6,7 +6,7 @@ import (
 )
 
 var branch, message string
-var skip, push, emojis, upstream, coauthored bool
+var skip, push, force, emojis, upstream, coauthored bool
 
 var commitCmd = &cobra.Command{
 	Use:     "commit",
@@ -15,6 +15,7 @@ var commitCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, files []string) error {
 		return commit.Commit(commit.CommitOptions{
 			Push:        push,
+			Force:       force,
 			Emojis:      emojis,
 			Branch:      branch,
 			Coauthored:  coauthored,
@@ -27,6 +28,7 @@ var commitCmd = &cobra.Command{
 }
 
 func init() {
+	commitCmd.Flags().BoolVarP(&force, "force", "f", false, "Force the push to the branch with --force-with-lease")
 	commitCmd.Flags().BoolVarP(&skip, "yes", "y", false, "Skip all prompts or not")
 	commitCmd.Flags().BoolVarP(&push, "push", "p", false, "Automatically push the commit")
 	commitCmd.Flags().BoolVarP(&emojis, "emojis", "e", false, "Use emojis when generating the message")

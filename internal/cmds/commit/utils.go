@@ -18,7 +18,7 @@ func push(opts PushOptions) error {
 		return err
 	}
 
-	if err := git.Push(resolved, opts.SetUpstream); err != nil {
+	if err := git.Push(resolved, opts.Force, opts.SetUpstream); err != nil {
 		return err
 	}
 

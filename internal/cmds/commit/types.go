@@ -1,12 +1,14 @@
 package commit
 
 type PushOptions struct {
-	Branch      string
+	Force       bool
 	SetUpstream bool
+	Branch      string
 }
 
 type CommitOptions struct {
 	Push        bool
+	Force       bool
 	Emojis      bool
 	Coauthored  bool
 	SkipPrompts bool
