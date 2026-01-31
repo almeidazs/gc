@@ -11,7 +11,7 @@ var skip, emojis, coauthored bool
 var commitCmd = &cobra.Command{
 	Use:     "commit",
 	Aliases: []string{"cmt"},
-	Short:   "Generate commit messages and push-it",
+	Short:   "Generate ergonomic commit messages with AI",
 	RunE: func(cmd *cobra.Command, files []string) error {
 		return commit.Commit(commit.CommitOptions{
 			Branch:      branch,
