@@ -79,9 +79,11 @@ func getPath() (string, error) {
 
 	if cachedPath == "" {
 		home, err := os.UserHomeDir()
+
 		if err != nil {
 			return "", err
 		}
+		
 		return filepath.Join(home, configDir, configFile), nil
 	}
 

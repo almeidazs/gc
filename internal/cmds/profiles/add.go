@@ -52,7 +52,8 @@ func askModel(key string) (apikey string, name string, aimodel string) {
 		fields = append(fields,
 			huh.NewInput().
 				Title("What is the API key?").
-				Value(&key),
+				Value(&key).
+				EchoMode(huh.EchoModePassword),
 		)
 	}
 
