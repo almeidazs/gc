@@ -83,7 +83,7 @@ func getPath() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		
+
 		return filepath.Join(home, configDir, configFile), nil
 	}
 

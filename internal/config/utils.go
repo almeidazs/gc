@@ -62,6 +62,13 @@ func (c *Config) Remove(name string) error {
 	return nil
 }
 
+func (c *Config) Sweep() error {
+	c.Current = ""
+	c.Profiles = map[string]Profile{}
+
+	return c.Save()
+}
+
 func (c *Config) Switch(name string) error {
 	if c.Current == name {
 		return fmt.Errorf("This is already your current profile")
