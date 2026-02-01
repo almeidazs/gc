@@ -3,6 +3,7 @@ package cmd
 import (
 	"os"
 
+	"github.com/almeidazs/gc/internal/exceptions"
 	"github.com/almeidazs/gc/internal/version"
 	"github.com/spf13/cobra"
 )
@@ -10,7 +11,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:           "gc",
 	SilenceUsage:  true,
-	SilenceErrors: false,
+	SilenceErrors: true,
 	Version:       version.Version,
 	Short:         "GC is an ergonomic AI-powered commit message generator",
 }
@@ -22,7 +23,5 @@ func init() {
 func Exec() {
 	err := rootCmd.Execute()
 
-	if err != nil {
-		os.Exit(1)
-	}
+	os.Exit(exceptions.ExitCode(err))
 }
