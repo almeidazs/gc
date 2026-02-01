@@ -52,11 +52,18 @@ func Commit(options CommitOptions) error {
 	}
 
 	if options.Push || profile.AlwaysPush {
-		spinner.Update("Automatic push detected, trying to push to the branch")
+		setUpstream := options.SetUpstream || profile.AlwaysSetUpstream
+		message := "Automatic push detected, trying to push to the branch"
+
+		if setUpstream {
+			message += " and setting the upstream"
+		}
+
+		spinner.Update(message)
 
 		return push(PushOptions{
 			Branch:      options.Branch,
-			SetUpstream: options.SetUpstream,
+			SetUpstream: setUpstream,
 		})
 	}
 

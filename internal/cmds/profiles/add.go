@@ -27,11 +27,12 @@ func Add(name, key string) error {
 	}
 
 	if err := cfg.Add(config.Profile{
-		Name:       name,
-		Model:      model,
-		UseEmojis:  false,
-		AlwaysPush: false,
-		Provider:   provider,
+		Name:              name,
+		Model:             model,
+		UseEmojis:         false,
+		AlwaysPush:        false,
+		Provider:          provider,
+		AlwaysSetUpstream: false,
 	}); err != nil {
 		return err
 	}
