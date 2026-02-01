@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/almeidazs/gc/internal/exceptions"
 	"github.com/almeidazs/gc/internal/version"
 	"github.com/rhysd/go-github-selfupdate/selfupdate"
 )
@@ -13,7 +14,7 @@ func Update() error {
 	latest, found, err := version.CheckUpdate(context.TODO(), version.Version)
 
 	if err != nil {
-		return fmt.Errorf("couldn’t check for updates: %w", err)
+		return exceptions.InternalError("couldn’t check for updates: %w", err)
 	}
 
 	if !found {
@@ -27,11 +28,11 @@ func Update() error {
 	exe, err := os.Executable()
 
 	if err != nil {
-		return fmt.Errorf("couldn’t get executable path: %w", err)
+		return exceptions.InternalError("couldn’t get executable path: %w", err)
 	}
 
 	if err := selfupdate.UpdateTo(latest.AssetURL, exe); err != nil {
-		return fmt.Errorf("update failed: %w", err)
+		return exceptions.InternalError("update failed: %w", err)
 	}
 
 	fmt.Printf("Update complete ✨ (%v)", latest.Version)

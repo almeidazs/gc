@@ -2,7 +2,8 @@ package ai
 
 import (
 	"encoding/json"
-	"fmt"
+
+	"github.com/almeidazs/gc/internal/exceptions"
 )
 
 const metaURL = "https://api.together.xyz/v1/chat/completions"
@@ -29,17 +30,19 @@ func requestMeta(key, model, prompt string) (string, error) {
 	}
 
 	body, err := doRequest(metaURL, "POST", "Authorization", "Bearer "+key, payload)
+
 	if err != nil {
-		return "", err
+		return "", exceptions.InternalError("%v", err)
 	}
 
 	var result metaResponse
+
 	if err := json.Unmarshal(body, &result); err != nil {
-		return "", err
+		return "", exceptions.InternalError("%v", err)
 	}
 
 	if len(result.Choices) == 0 {
-		return "", fmt.Errorf("no response from meta")
+		return "", exceptions.InternalError("no response from meta")
 	}
 
 	return result.Choices[0].Message.Content, nil

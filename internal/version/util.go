@@ -3,6 +3,7 @@ package version
 import (
 	"context"
 
+	"github.com/almeidazs/gc/internal/exceptions"
 	"github.com/blang/semver"
 	"github.com/rhysd/go-github-selfupdate/selfupdate"
 )
@@ -13,7 +14,7 @@ func CheckUpdate(ctx context.Context, crr string) (*selfupdate.Release, bool, er
 	latest, found, err := selfupdate.DetectLatest(slug)
 
 	if err != nil {
-		return nil, false, err
+		return nil, false, exceptions.InternalError("%v", err)
 	}
 
 	if !found || crr == "" {
@@ -23,7 +24,7 @@ func CheckUpdate(ctx context.Context, crr string) (*selfupdate.Release, bool, er
 	current, err := semver.Parse(crr)
 
 	if err != nil {
-		return nil, false, err
+		return nil, false, exceptions.InternalError("%v", err)
 	}
 
 	if latest.Version.LTE(current) {

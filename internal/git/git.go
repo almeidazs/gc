@@ -2,12 +2,11 @@ package git
 
 import (
 	"bytes"
-	"errors"
-	"fmt"
 	"io"
 	"os/exec"
 	"strings"
 
+	"github.com/almeidazs/gc/internal/exceptions"
 	"github.com/almeidazs/gc/internal/style"
 )
 
@@ -19,7 +18,7 @@ func execCmd(name string, args ...string) (string, error) {
 	cmd.Stderr = &output
 
 	if err := cmd.Run(); err != nil {
-		return "", err
+		return "", exceptions.InternalError("%v", err)
 	}
 
 	return strings.TrimSpace(output.String()), nil
@@ -58,10 +57,10 @@ func Stage(files []string, spinner *style.Spinner) error {
 
 	if err := cmd.Run(); err != nil {
 		if stderr.Len() > 0 {
-			return fmt.Errorf("git add failed: %s", strings.TrimSpace(stderr.String()))
+			return exceptions.InternalError("git add failed: %s", strings.TrimSpace(stderr.String()))
 		}
 
-		return fmt.Errorf("git add failed: %w", err)
+		return exceptions.InternalError("git add failed: %w", err)
 	}
 
 	return nil
@@ -71,11 +70,12 @@ func StagedDiff() (string, error) {
 	var output bytes.Buffer
 
 	cmd := exec.Command("git", "diff", "--staged")
+
 	cmd.Stdout = &output
 	cmd.Stderr = &output
 
 	if err := cmd.Run(); err != nil {
-		return "", fmt.Errorf(
+		return "", exceptions.InternalError(
 			"git diff --staged failed: %w\n%s",
 			err,
 			strings.TrimSpace(output.String()),
@@ -85,7 +85,7 @@ func StagedDiff() (string, error) {
 	diff := output.String()
 
 	if strings.TrimSpace(diff) == "" {
-		return "", errors.New("no staged changes to commit")
+		return "", exceptions.CommandError("no staged changes to commit")
 	}
 
 	return diff, nil
@@ -102,10 +102,10 @@ func Commit(message string) error {
 
 	if err := cmd.Run(); err != nil {
 		if stderr.Len() > 0 {
-			return fmt.Errorf("git commit failed: %s", strings.TrimSpace(stderr.String()))
+			return exceptions.InternalError("git commit failed: %s", strings.TrimSpace(stderr.String()))
 		}
 
-		return fmt.Errorf("git commit failed: %w", err)
+		return exceptions.InternalError("git commit failed: %w", err)
 	}
 
 	return nil
@@ -130,10 +130,10 @@ func Push(branch string, force, setUpstream bool) error {
 
 	if err := cmd.Run(); err != nil {
 		if stderr.Len() > 0 {
-			return fmt.Errorf("git push failed: %s", strings.TrimSpace(stderr.String()))
+			return exceptions.InternalError("git push failed: %s", strings.TrimSpace(stderr.String()))
 		}
 
-		return fmt.Errorf("git push failed: %w", err)
+		return exceptions.InternalError("git push failed: %w", err)
 	}
 
 	return nil

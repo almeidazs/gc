@@ -1,9 +1,8 @@
 package profiles
 
 import (
-	"fmt"
-
 	"github.com/almeidazs/gc/internal/config"
+	"github.com/almeidazs/gc/internal/exceptions"
 	"github.com/almeidazs/gc/internal/keyring"
 )
 
@@ -17,15 +16,15 @@ func Remove(name string) error {
 	isCrr := cfg.Current == name
 
 	if isCrr {
-		return fmt.Errorf("currently \"%s\" is your profile, you need to switch it first", name)
+		return exceptions.CommandError("currently \"%s\" is your profile, you need to switch it first", name)
 	}
 
 	if _, exists := cfg.Profiles[name]; !exists {
-		return fmt.Errorf("we could not found the profile \"%s\"\n", name)
+		return exceptions.CommandError("we could not found the profile \"%s\"\n", name)
 	}
 
 	if err := keyring.Remove(name); err != nil {
-		return err
+		return exceptions.InternalError("%v", err)
 	}
 
 	if err := cfg.Remove(name); err != nil {

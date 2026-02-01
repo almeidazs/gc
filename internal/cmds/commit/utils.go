@@ -6,6 +6,7 @@ import (
 
 	"github.com/almeidazs/gc/internal/ai"
 	"github.com/almeidazs/gc/internal/config"
+	"github.com/almeidazs/gc/internal/exceptions"
 	"github.com/almeidazs/gc/internal/git"
 	"github.com/almeidazs/gc/internal/style"
 	"github.com/charmbracelet/huh"
@@ -55,7 +56,7 @@ func resolveMessage(opts CommitOptions, profile config.Profile, diff string) (st
 
 func validateOptions(opts CommitOptions) error {
 	if opts.Coauthored && opts.SkipPrompts {
-		return fmt.Errorf("--coauthored cannot be used with --yes")
+		return exceptions.CommandError("--coauthored cannot be used with --yes")
 	}
 
 	return nil
@@ -79,14 +80,14 @@ func generateMessage(diff string, skip bool, emojis bool) (string, error) {
 
 	if style.USE_ACCESSIBLE_MODE {
 		if err := input.RunAccessible(os.Stdout, os.Stdin); err != nil {
-			return "", err
+			return "", exceptions.InternalError("%v", err)
 		}
 
 		return content, nil
 	}
 
 	if err := input.Run(); err != nil {
-		return "", err
+		return "", exceptions.InternalError("%v", err)
 	}
 
 	return content, nil

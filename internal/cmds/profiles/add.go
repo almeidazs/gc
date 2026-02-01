@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/almeidazs/gc/internal/config"
+	"github.com/almeidazs/gc/internal/exceptions"
 	"github.com/almeidazs/gc/internal/keyring"
 	"github.com/almeidazs/gc/internal/style"
 	"github.com/charmbracelet/huh"
@@ -17,13 +18,13 @@ func Add(name, key string) error {
 	}
 
 	if _, exists := cfg.Profiles[name]; exists {
-		return fmt.Errorf("\"%s\" is already a profile", name)
+		return exceptions.CommandError("\"%s\" is already a profile", name)
 	}
 
 	key, provider, model := askModel(key)
 
 	if err := keyring.Set(name, key); err != nil {
-		return err
+		return exceptions.InternalError("%v", err)
 	}
 
 	if err := cfg.Add(config.Profile{
@@ -31,17 +32,17 @@ func Add(name, key string) error {
 		Model:             model,
 		UseEmojis:         false,
 		AlwaysPush:        false,
-		Provider:          provider,
 		AlwaysSetUpstream: false,
+		Provider:          provider,
 	}); err != nil {
-		return err
+		return exceptions.InternalError("%v", err)
 	}
 
 	if err := cfg.Save(); err != nil {
-		return err
+		return exceptions.InternalError("%v", err)
 	}
 
-	fmt.Printf("We created and switched to \"%s\"\n", name)
+	fmt.Printf("We created and switched you to \"%s\"\n", name)
 
 	return nil
 }

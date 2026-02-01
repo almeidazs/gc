@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	ErrCommand = errors.New("command err")
+	ErrCommand  = errors.New("command err")
 	ErrInternal = errors.New("internal")
 )
 

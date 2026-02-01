@@ -3,10 +3,11 @@ package ai
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/almeidazs/gc/internal/exceptions"
 )
 
 var httpClient = &http.Client{
@@ -27,12 +28,13 @@ func doRequest(url, method, authHeader, authValue string, payload interface{}) (
 	body, err := json.Marshal(payload)
 
 	if err != nil {
-		return nil, err
+		return nil, exceptions.InternalError("%v", err)
 	}
 
 	req, err := http.NewRequest(method, url, bytes.NewReader(body))
+
 	if err != nil {
-		return nil, err
+		return nil, exceptions.InternalError("%v", err)
 	}
 
 	req.Header.Set("Content-Type", "application/json")
@@ -41,7 +43,7 @@ func doRequest(url, method, authHeader, authValue string, payload interface{}) (
 	resp, err := httpClient.Do(req)
 
 	if err != nil {
-		return nil, err
+		return nil, exceptions.InternalError("%v", err)
 	}
 
 	defer resp.Body.Close()
@@ -49,11 +51,11 @@ func doRequest(url, method, authHeader, authValue string, payload interface{}) (
 	bodyBytes, err := io.ReadAll(resp.Body)
 
 	if err != nil {
-		return nil, err
+		return nil, exceptions.InternalError("%v", err)
 	}
 
 	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("http %d: %s", resp.StatusCode, string(bodyBytes))
+		return nil, exceptions.InternalError("http %d: %s", resp.StatusCode, string(bodyBytes))
 	}
 
 	return bodyBytes, nil

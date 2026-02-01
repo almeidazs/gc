@@ -3,9 +3,10 @@ package ai
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
+
+	"github.com/almeidazs/gc/internal/exceptions"
 )
 
 const anthropicURL = "https://api.anthropic.com/v1/messages"
@@ -36,13 +37,13 @@ func requestAnthropic(key, model, prompt string) (string, error) {
 	body, err := json.Marshal(payload)
 
 	if err != nil {
-		return "", err
+		return "", exceptions.InternalError("%v", err)
 	}
 
 	req, err := http.NewRequest("POST", anthropicURL, bytes.NewReader(body))
 
 	if err != nil {
-		return "", err
+		return "", exceptions.InternalError("%v", err)
 	}
 
 	req.Header.Set("Content-Type", "application/json")
@@ -52,7 +53,7 @@ func requestAnthropic(key, model, prompt string) (string, error) {
 	resp, err := httpClient.Do(req)
 
 	if err != nil {
-		return "", err
+		return "", exceptions.InternalError("%v", err)
 	}
 
 	defer resp.Body.Close()
@@ -60,11 +61,11 @@ func requestAnthropic(key, model, prompt string) (string, error) {
 	bodyBytes, err := io.ReadAll(resp.Body)
 
 	if err != nil {
-		return "", err
+		return "", exceptions.InternalError("%v", err)
 	}
 
 	if resp.StatusCode != 200 {
-		return "", fmt.Errorf("http %d: %s", resp.StatusCode, string(bodyBytes))
+		return "", exceptions.InternalError("http %d: %s", resp.StatusCode, string(bodyBytes))
 	}
 
 	var result anthropicResponse
@@ -74,7 +75,7 @@ func requestAnthropic(key, model, prompt string) (string, error) {
 	}
 
 	if len(result.Content) == 0 {
-		return "", fmt.Errorf("no response from anthropic")
+		return "", exceptions.InternalError("no response from anthropic")
 	}
 
 	return result.Content[0].Text, nil

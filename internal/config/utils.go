@@ -2,9 +2,10 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"path/filepath"
+
+	"github.com/almeidazs/gc/internal/exceptions"
 )
 
 func (c *Config) Save() error {
@@ -15,25 +16,29 @@ func (c *Config) Save() error {
 	}
 
 	if err := os.MkdirAll(filepath.Dir(path), 0700); err != nil {
-		return err
+		return exceptions.InternalError("%v", err)
 	}
 
 	data, err := json.MarshalIndent(c, "", "\t")
 
 	if err != nil {
-		return err
+		return exceptions.InternalError("%v", err)
 	}
 
-	return os.WriteFile(path, data, 0600)
+	if err := os.WriteFile(path, data, 0600); err != nil {
+		return exceptions.InternalError("%v", err)
+	}
+
+	return nil
 }
 
 func (c *Config) Add(profile Profile) error {
 	if profile.Name == "" {
-		return fmt.Errorf("profile name cannot be empty")
+		return exceptions.CommandError("profile name cannot be empty")
 	}
 
 	if profile.Provider == "" {
-		return fmt.Errorf("provider cannot be empty")
+		return exceptions.CommandError("provider cannot be empty")
 	}
 
 	c.Current = profile.Name
@@ -44,7 +49,7 @@ func (c *Config) Add(profile Profile) error {
 
 func (c *Config) Remove(name string) error {
 	if _, ok := c.Profiles[name]; !ok {
-		return fmt.Errorf("profile '%s' not found", name)
+		return exceptions.CommandError("profile '%s' not found", name)
 	}
 
 	delete(c.Profiles, name)
@@ -71,15 +76,15 @@ func (c *Config) Sweep() error {
 
 func (c *Config) Switch(name string) error {
 	if c.Current == name {
-		return fmt.Errorf("This is already your current profile")
+		return exceptions.CommandError("This is already your current profile")
 	}
 
 	if _, exists := c.Profiles[name]; !exists {
-		return fmt.Errorf("\"%s\" is not a profile", name)
+		return exceptions.CommandError("\"%s\" is not a profile", name)
 	}
 
 	if _, ok := c.Profiles[name]; !ok {
-		return fmt.Errorf("profile '%s' not found", name)
+		return exceptions.CommandError("profile '%s' not found", name)
 	}
 
 	c.Current = name

@@ -2,10 +2,11 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"path/filepath"
 	"sync"
+
+	"github.com/almeidazs/gc/internal/exceptions"
 )
 
 const (
@@ -22,17 +23,17 @@ func GetCurrent() (Profile, error) {
 	cfg, err := Load()
 
 	if err != nil {
-		return Profile{}, err
+		return Profile{}, exceptions.InternalError("%v", err)
 	}
 
 	if cfg.Current == "" {
-		return Profile{}, fmt.Errorf("no active profile set")
+		return Profile{}, exceptions.CommandError("no active profile set")
 	}
 
 	profile, ok := cfg.Profiles[cfg.Current]
 
 	if !ok {
-		return Profile{}, fmt.Errorf("active profile '%s' not found", cfg.Current)
+		return Profile{}, exceptions.CommandError("active profile '%s' not found", cfg.Current)
 	}
 
 	return profile, nil
@@ -42,7 +43,7 @@ func Load() (*Config, error) {
 	path, err := getPath()
 
 	if err != nil {
-		return nil, err
+		return nil, exceptions.InternalError("%v", err)
 	}
 
 	data, err := os.ReadFile(path)
@@ -58,7 +59,7 @@ func Load() (*Config, error) {
 	var cfg Config
 
 	if err := json.Unmarshal(data, &cfg); err != nil {
-		return nil, fmt.Errorf("failed to parse config: %w", err)
+		return nil, exceptions.InternalError("failed to parse config: %w", err)
 	}
 
 	if cfg.Profiles == nil {
@@ -81,7 +82,7 @@ func getPath() (string, error) {
 		home, err := os.UserHomeDir()
 
 		if err != nil {
-			return "", err
+			return "", exceptions.InternalError("%v", err)
 		}
 
 		return filepath.Join(home, configDir, configFile), nil

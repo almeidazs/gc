@@ -2,7 +2,8 @@ package ai
 
 import (
 	"encoding/json"
-	"fmt"
+
+	"github.com/almeidazs/gc/internal/exceptions"
 )
 
 const xaiURL = "https://api.x.ai/v1/chat/completions"
@@ -29,17 +30,19 @@ func requestXAI(key, model, prompt string) (string, error) {
 	}
 
 	body, err := doRequest(xaiURL, "POST", "Authorization", "Bearer "+key, payload)
+
 	if err != nil {
-		return "", err
+		return "", exceptions.InternalError("%v", err)
 	}
 
 	var result xaiResponse
+
 	if err := json.Unmarshal(body, &result); err != nil {
-		return "", err
+		return "", exceptions.InternalError("%v", err)
 	}
 
 	if len(result.Choices) == 0 {
-		return "", fmt.Errorf("no response from xai")
+		return "", exceptions.InternalError("no response from xai")
 	}
 
 	return result.Choices[0].Message.Content, nil

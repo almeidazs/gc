@@ -62,8 +62,8 @@ func Commit(options CommitOptions) error {
 		spinner.Update(message)
 
 		return push(PushOptions{
-			Branch:      options.Branch,
 			SetUpstream: setUpstream,
+			Branch:      options.Branch,
 		})
 	}
 

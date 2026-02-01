@@ -1,7 +1,7 @@
 package ai
 
 import (
-	"fmt"
+	"github.com/almeidazs/gc/internal/exceptions"
 )
 
 func Prompt(diff string, emojis bool) (string, error) {
@@ -39,6 +39,6 @@ func request(key, provider, model, prompt string) (string, error) {
 	case "xai":
 		return requestXAI(key, model, prompt)
 	default:
-		return "", fmt.Errorf("unsupported provider: %s", provider)
+		return "", exceptions.CommandError("unsupported provider: %s", provider)
 	}
 }

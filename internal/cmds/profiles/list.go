@@ -19,7 +19,7 @@ func List() error {
 	}
 
 	if len(cfg.Profiles) == 0 {
-		fmt.Println("Currently you do not have any profile, use gc add")
+		fmt.Println("Currently you do not have any profile, use \"gc add\"")
 
 		return nil
 	}

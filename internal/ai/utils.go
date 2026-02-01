@@ -1,8 +1,8 @@
 package ai
 
 import (
-	"fmt"
 	"github.com/almeidazs/gc/internal/config"
+	"github.com/almeidazs/gc/internal/exceptions"
 	"github.com/almeidazs/gc/internal/keyring"
 )
 
@@ -16,7 +16,7 @@ func getAI() (string, config.Profile, error) {
 	key, err := keyring.Get(current.Name)
 
 	if err != nil {
-		return "", config.Profile{}, fmt.Errorf("failed to get API key: %w", err)
+		return "", config.Profile{}, exceptions.InternalError("failed to get API key: %w", err)
 	}
 
 	return key, current, nil
